@@ -23,29 +23,24 @@ class ValentineHome extends StatefulWidget {
   State<ValentineHome> createState() => _ValentineHomeState();
 }
 
-// ──────────────────────────────────────────────────────────
-// We use "TickerProviderStateMixin" (instead of Single...) 
-// because we now have MULTIPLE animations running at once:
-// pulse, balloons, and sparkles!
-// ──────────────────────────────────────────────────────────
 class _ValentineHomeState extends State<ValentineHome>
     with TickerProviderStateMixin {
-  // ---------- Emoji Selection ----------
+  //  Emoji Selection
   final List<String> emojiOptions = ['Sweet Heart', 'Party Heart'];
   String selectedEmoji = 'Sweet Heart';
 
-  // ---------- Pulse Animation ----------
+  //  Pulse Animation
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
-  // ---------- NEW: Balloon Animation ----------
-  // This controller will animate balloons floating up the screen
+  //  Balloon Animation
+
   late AnimationController _balloonController;
   late Animation<double> _balloonAnimation;
-  bool _showBalloons = false; // tracks if balloons are visible
+  bool _showBalloons = false;
 
-  // ---------- NEW: Sparkle Animation ----------
-  // Sparkles will continuously twinkle around the heart
+  // Sparkle Animation
+
   late AnimationController _sparkleController;
   late Animation<double> _sparkleAnimation;
 
@@ -257,12 +252,6 @@ class _ValentineHomeState extends State<ValentineHome>
   }
 }
 
-// ══════════════════════════════════════════════════════════
-// NEW: BalloonPainter - Draws floating balloons
-//
-// This painter creates 8 colorful balloons that float up
-// the screen. Each balloon has a string attached!
-// ══════════════════════════════════════════════════════════
 class BalloonPainter extends CustomPainter {
   BalloonPainter({required this.animationValue});
 
@@ -270,7 +259,7 @@ class BalloonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Define balloon colors (bright and festive!)
+    // Define balloon colors
     final balloonColors = [
       Colors.red,
       Colors.pink,
@@ -339,13 +328,8 @@ class BalloonPainter extends CustomPainter {
       canvas.drawPath(knotPath, knotPaint);
 
       // ── Add shine/highlight on balloon ──
-      final shinePaint = Paint()
-        ..color = Colors.white.withOpacity(0.4);
-      canvas.drawCircle(
-        Offset(balloonX - 8, currentY - 10),
-        8,
-        shinePaint,
-      );
+      final shinePaint = Paint()..color = Colors.white.withOpacity(0.4);
+      canvas.drawCircle(Offset(balloonX - 8, currentY - 10), 8, shinePaint);
     }
   }
 
@@ -354,15 +338,6 @@ class BalloonPainter extends CustomPainter {
       oldDelegate.animationValue != animationValue;
 }
 
-// ══════════════════════════════════════════════════════════
-// ENHANCED: HeartEmojiPainter with Gradients, Sparkles, Trail
-//
-// New features added:
-// - Gradient fills for the heart shape
-// - Animated sparkles around the heart
-// - Glowing "love trail" aura effect
-// - Enhanced confetti with custom shapes
-// ══════════════════════════════════════════════════════════
 class HeartEmojiPainter extends CustomPainter {
   HeartEmojiPainter({
     required this.type,
@@ -400,9 +375,13 @@ class HeartEmojiPainter extends CustomPainter {
 
     // Draw trail with soft pink glow
     final trailPaint = Paint()
-      ..color = Colors.pink.withOpacity(1.0) // increased from 0.2 to 0.5 for more visibility
+      ..color = Colors.pink
+          .withOpacity(1.0) // increased from 0.2 to 0.5 for more visibility
       ..style = PaintingStyle.fill
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 60); // increased from 15 to 30 for stronger glow
+      ..maskFilter = const MaskFilter.blur(
+        BlurStyle.normal,
+        60,
+      ); // increased from 15 to 30 for stronger glow
     canvas.drawPath(trailPath, trailPaint);
 
     // ── Step 1: Draw the heart shape with GRADIENT ──
@@ -557,7 +536,7 @@ class HeartEmojiPainter extends CustomPainter {
     }
 
     // ── NEW: Draw animated sparkles around the heart ──
-    // Sparkles appear as small star bursts (lines radiating from a point)
+
     _drawSparkles(canvas, center, size);
   }
 
@@ -568,8 +547,7 @@ class HeartEmojiPainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
-    final dotPaint = Paint()
-      ..color = Colors.white.withOpacity(sparkleValue);
+    final dotPaint = Paint()..color = Colors.white.withOpacity(sparkleValue);
 
     // Create 6 sparkles at different positions around the heart
     final sparklePositions = [
@@ -583,7 +561,7 @@ class HeartEmojiPainter extends CustomPainter {
 
     for (final pos in sparklePositions) {
       // Each sparkle has 4 lines radiating out from center
-      final sparkleSize = 8 * sparkleValue; // grows/shrinks with animation
+      final sparkleSize = 8 * sparkleValue;
 
       // Horizontal line
       canvas.drawLine(
